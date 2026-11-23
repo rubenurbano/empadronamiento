@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Una posibilidad para resolver el empadronamiento by Rubén Sbarsky</title>
+<style>
+:root{
+  --ink:#172033;--muted:#667085;--paper:#f4f6fa;--white:#fff;
+  --blue:#2457d6;--blue2:#eaf0ff;--line:#e5e9f1;--teal:#087e8b;
+  --shadow:0 14px 40px rgba(24,39,75,.08);--radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.68 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+a{color:var(--blue);text-decoration-thickness:1px;text-underline-offset:3px;overflow-wrap:anywhere}
+a:hover{color:#153b9e}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.topinner{max-width:1180px;margin:auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:750;letter-spacing:-.02em}
+.brandmark{width:34px;height:34px;border-radius:11px;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 13px;font:600 13px system-ui;cursor:pointer}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.layout{max-width:1180px;margin:34px auto;padding:0 22px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;align-items:start}
+nav{position:sticky;top:78px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.navtitle{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:0 0 12px}
+nav a{display:block;padding:8px 10px;border-radius:9px;color:#475467;text-decoration:none;font-size:13px;line-height:1.35}
+nav a:hover,nav a.active{background:var(--blue2);color:var(--blue)}
+main{min-width:0}
+.hero{background:linear-gradient(135deg,#15264b 0%,#2457d6 100%);color:#fff;padding:38px clamp(24px,5vw,54px);border-radius:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid rgba(255,255,255,.15);border-radius:50%;right:-75px;top:-105px;box-shadow:0 0 0 30px rgba(255,255,255,.04),0 0 0 60px rgba(255,255,255,.03)}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;font-weight:800;color:#cbd8ff;margin:0 0 12px}
+h1{font-size:clamp(27px,4vw,42px);line-height:1.12;letter-spacing:-.04em;margin:0 0 18px;max-width:760px}
+.hero p{max-width:720px;color:#e2eaff;margin:0;font-size:16px}
+.hero-meta{margin-top:25px;padding-top:17px;border-top:1px solid rgba(255,255,255,.2);font-size:13px;color:#dbe5ff}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(22px,3vw,34px);margin-top:20px;box-shadow:0 6px 22px rgba(24,39,75,.035)}
+h2{font-size:22px;line-height:1.25;letter-spacing:-.025em;margin:0 0 17px}
+h3{font-size:16px;margin:24px 0 8px;letter-spacing:-.01em}
+p{margin:0 0 14px}
+p:last-child{margin-bottom:0}
+ul{padding-left:22px;margin:8px 0 18px}
+li{padding-left:4px;margin:5px 0}
+.lead{font-size:17px;color:#344054}
+.callout{border-left:4px solid var(--teal);background:#effafa;padding:17px 19px;border-radius:0 12px 12px 0;margin:18px 0}
+.callout strong{color:#075d66}
+.steps{display:grid;gap:12px;margin-top:16px}
+.step{display:grid;grid-template-columns:42px 1fr;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fcfdff}
+.num{width:36px;height:36px;border-radius:12px;background:var(--blue2);color:var(--blue);display:grid;place-items:center;font-weight:800}
+.step h3{margin:1px 0 5px}
+.step p{margin:0;color:#475467}
+.reference{background:#f8faff;border:1px solid #dce5ff;border-radius:14px;padding:18px;margin:14px 0}
+.reference p{margin:4px 0}
+.contactgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:15px}
+.contact{background:#f8f9fc;border:1px solid var(--line);padding:14px;border-radius:12px}
+.contact small{display:block;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:10px}
+.contact strong{display:block;margin-top:5px;overflow-wrap:anywhere}
+.closing{background:#172033;color:#fff}
+.closing h2{color:#fff}
+.closing p{color:#e1e7f0}
+.signature{font-weight:750;color:#fff;margin-top:20px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 12px}
+@media(max-width:820px){
+ .layout{grid-template-columns:1fr;margin:18px auto;gap:16px}
+ nav{position:relative;top:auto;display:flex;gap:5px;overflow-x:auto;white-space:nowrap;padding:10px}
+ .navtitle{display:none}nav a{display:inline-block;flex:0 0 auto}
+ .hero{border-radius:18px}
+}
+@media(max-width:520px){
+ .topinner{padding:10px 14px}.brand span:last-child{font-size:13px}
+ .actions .btn{padding:8px 10px;font-size:12px}
+ .layout{padding:0 12px}
+ .contactgrid{grid-template-columns:1fr}
+ .hero{padding:28px 22px}
+}
+@media print{
+ body{background:#fff;font-size:11pt}
+ .topbar,nav,.actions{display:none!important}
+ .layout{display:block;max-width:none;margin:0;padding:0}
+ .hero{background:#fff;color:#111;box-shadow:none;border:2px solid #172033;padding:22px}
+ .hero p,.hero-meta,.eyebrow{color:#333}
+ .hero:after{display:none}
+ .card{box-shadow:none;break-inside:avoid;margin-top:12px;padding:20px}
+ a{color:#111;text-decoration:none}
+ footer{padding:12px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="topinner">
+  <div class="brand"><span class="brandmark">V</span><span>Información para valoración social · València</span></div>
+  <div class="actions">
+   <button class="btn" onclick="window.print()">Imprimir / guardar PDF</button>
+   <button class="btn primary" onclick="document.getElementById('referencias').scrollIntoView({behavior:'smooth'})">Ver referencias</button>
+  </div>
+ </div>
+</header>
+
+<div class="layout">
+<nav aria-label="Navegación del documento">
+ <p class="navtitle">En este documento</p>
+ <a href="#inicio">Presentación</a>
+ <a href="#posibilidad">1. En qué consiste</a>
+ <a href="#donde">2. Dónde aparece</a>
+ <a href="#solicitud">3. Cómo se solicita</a>
+ <a href="#servicios">4. Qué consultar</a>
+ <a href="#interes">5. Por qué interesa</a>
+ <a href="#referencias">6. Referencias oficiales</a>
+ <a href="#peticion">Lo que me gustaría</a>
+</nav>
+
+<main>
+<section class="hero" id="inicio">
+ <p class="eyebrow">Documento informativo · Para revisión profesional</p>
+ <h1>Una posibilidad para resolver el empadronamiento <span style="font-size:.62em;font-weight:600;letter-spacing:-.02em;white-space:nowrap">by Rubén Sbarsky</span></h1>
+ <p>Casos especiales y domicilio subsidiario en un Centro Municipal de Servicios Sociales (CMSS).</p>
+ <div class="hero-meta">Procedimiento municipal PA.GP.65 · Ayuntamiento de València</div>
+</section>
+
+<section class="card">
+ <p class="lead">Quisiera comentarte una posibilidad que he encontrado investigando los procedimientos del Ayuntamiento de València y que considero que podría ser útil para resolver mi situación de empadronamiento.</p>
+ <p>Se trata del procedimiento municipal <strong>PA.GP.65 – Casos especiales de empadronamiento</strong>.</p>
+ <p>He comprobado que el Ayuntamiento contempla situaciones en las que una persona no puede acreditar documentalmente la disponibilidad de la vivienda donde reside o no dispone de un domicilio convencional.</p>
+ <div class="callout"><strong>La posibilidad que me interesa:</strong> el propio procedimiento contempla solicitar el empadronamiento subsidiario en un Centro Municipal de Servicios Sociales (CMSS).</div>
+ <p>Te explico lo que he encontrado.</p>
+ <p><strong>Rubén Sbarsky</strong></p>
+</section>
+
+<section class="card" id="posibilidad">
+ <h2>1. ¿En qué consiste esta posibilidad?</h2>
+ <p>El Ayuntamiento de València contempla que determinadas personas que se encuentran en situaciones de vulnerabilidad residencial puedan empadronarse aunque no dispongan de un contrato de alquiler, autorización del propietario u otra documentación convencional que acredite la disponibilidad de la vivienda.</p>
+ <p>El procedimiento permite comprobar la residencia efectiva mediante los mecanismos municipales correspondientes.</p>
+ <p>Además, contempla que, cuando proceda, el empadronamiento pueda realizarse subsidiariamente en un domicilio administrativo vinculado a:</p>
+ <ul><li>Un Centro Municipal de Servicios Sociales (CMSS).</li><li>El CAI.</li><li>El CAST.</li></ul>
+ <p>Esto significa que una persona que no dispone de un domicilio convencional podría tener una alternativa administrativa para mantener su empadronamiento.</p>
+ <p>No significa que tenga que vivir físicamente en las dependencias del centro. Se trata de una solución padronal para determinadas situaciones sociales y residenciales.</p>
+</section>
+
+<section class="card" id="donde">
+ <h2>2. ¿Dónde aparece esta opción?</h2>
+ <p>En el formulario oficial del Ayuntamiento de València correspondiente al procedimiento PA.GP.65.</p>
+ <p>En su apartado de solicitud aparece expresamente la posibilidad de solicitar el empadronamiento subsidiario en un Centro Municipal de Servicios Sociales, en el CAI o en el CAST, según corresponda.</p>
+ <div class="callout"><strong>Por tanto,</strong> no se trata simplemente de una posibilidad teórica: está contemplada en el propio impreso municipal.</div>
+</section>
+
+<section class="card" id="solicitud">
+ <h2>3. ¿Cómo se solicita?</h2>
+ <p>El procedimiento que he podido identificar es el siguiente:</p>
+ <div class="steps">
+  <article class="step"><div class="num">1</div><div><h3>Descargar el formulario oficial</h3><p>Se trata del documento PA.GP.65 – Casos especiales de empadronamiento.</p><p><a href="https://sede.valencia.es/sede/descarga/doc/DOCUMENT_1_20220004112422" target="_blank" rel="noopener">Abrir el formulario oficial PDF ↗</a></p></div></article>
+  <article class="step"><div class="num">2</div><div><h3>Cumplimentar los datos personales</h3><p>Hay que identificar al solicitante y cumplimentar los apartados correspondientes a sus circunstancias residenciales.</p></div></article>
+  <article class="step"><div class="num">3</div><div><h3>Indicar la modalidad subsidiaria</h3><p>En el apartado de solicitud del formulario debe señalarse la opción de empadronamiento subsidiario en un Centro Municipal de Servicios Sociales (CMSS), en lugar de limitarse a solicitar el empadronamiento en una vivienda cuya disponibilidad no puede acreditarse.</p></div></article>
+  <article class="step"><div class="num">4</div><div><h3>Presentar la solicitud</h3><p>La solicitud debe presentarse por los cauces administrativos habilitados por el Ayuntamiento.</p><p>Puede ser necesario que los Servicios Sociales municipales conozcan y valoren previamente la situación de vulnerabilidad o exclusión residencial.</p></div></article>
+  <article class="step"><div class="num">5</div><div><h3>Intervención municipal</h3><p>Los servicios municipales valoran las circunstancias y determinan cómo debe tramitarse el expediente.</p><p>El procedimiento contempla, cuando corresponde, actuaciones de comprobación de residencia efectiva por parte de la Policía Local.</p></div></article>
+  <article class="step"><div class="num">6</div><div><h3>Formalización del empadronamiento</h3><p>Si se admite la solicitud, se siguen las instrucciones del Servicio de Padrón para completar la inscripción.</p></div></article>
+ </div>
+</section>
+
+<section class="card" id="servicios">
+ <h2>4. ¿Qué necesitaría de los Servicios Sociales?</h2>
+ <p>Lo que me gustaría consultar contigo es:</p>
+ <ul>
+  <li>Si esta modalidad puede aplicarse a mis circunstancias actuales.</li>
+  <li>Si es necesario que exista un informe social que acredite mi situación.</li>
+  <li>Si podéis orientarme sobre el Centro Municipal de Servicios Sociales competente.</li>
+  <li>Si podéis coordinaros con el Ayuntamiento para iniciar este procedimiento.</li>
+  <li>Qué documentación debería aportar.</li>
+  <li>Si existe alguna particularidad que deba conocer antes de presentar la solicitud.</li>
+ </ul>
+</section>
+
+<section class="card" id="interes">
+ <h2>5. ¿Por qué me interesa esta alternativa?</h2>
+ <p>Mi intención es disponer de una situación administrativa estable mientras resuelvo mi problema habitacional.</p>
+ <p>El empadronamiento es importante para mantener la continuidad de mis gestiones con las administraciones públicas, recibir notificaciones y acreditar mi residencia cuando sea necesario.</p>
+ <p>También puede ser relevante para la tramitación de prestaciones sociales, aunque entiendo que cada prestación tiene sus propios requisitos y que el empadronamiento no garantiza por sí solo su concesión.</p>
+ <p>No estoy planteando esta posibilidad como una solución definitiva a mi situación de vivienda, sino como una herramienta administrativa que podría evitar problemas adicionales mientras encuentro una residencia estable.</p>
+</section>
+
+<section class="card" id="referencias">
+ <h2>6. Referencias oficiales</h2>
+ <div class="reference">
+  <strong>Ayuntamiento de València</strong>
+  <p>Procedimiento PA.GP.65 – Casos especiales de empadronamiento.</p>
+  <p><a href="https://sede.valencia.es/sede/descarga/doc/DOCUMENT_1_20220004112422" target="_blank" rel="noopener">Formulario oficial PDF ↗</a></p>
+ </div>
+ <div class="contactgrid">
+  <div class="contact"><small>Oficina del Padrón Municipal</small><strong>Carrer del Periodista Azzati, 2, València.</strong></div>
+  <div class="contact"><small>Teléfono</small><strong>962 081 104</strong></div>
+  <div class="contact" style="grid-column:1/-1"><small>Correo electrónico</small><strong><a href="mailto:poblacion@valencia.es">poblacion@valencia.es</a></strong></div>
+ </div>
+</section>
+
+<section class="card closing" id="peticion">
+ <h2>Lo que me gustaría</h2>
+ <p>Me gustaría que pudiéramos revisar conjuntamente este procedimiento y comprobar si puedo acogerme a esta modalidad de empadronamiento subsidiario en un Centro Municipal de Servicios Sociales.</p>
+ <p>Creo que merece la pena estudiar esta alternativa antes de descartar otras posibilidades administrativas.</p>
+ <p class="signature">Rubén Sbarsky</p>
+</section>
+
+<footer>Documento informativo para facilitar la revisión del procedimiento PA.GP.65 · València · Preparado por Rubén Sbarsky</footer>
+</main>
+</div>
+<script>
+const links=[...document.querySelectorAll('nav a')];
+const sections=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+   links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+entry.target.id));
+  }
+ });
+},{rootMargin:'-20% 0px -65% 0px'});
+sections.forEach(section=>observer.observe(section));
+</script>
+</body>
+</html>
